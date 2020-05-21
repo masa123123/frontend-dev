@@ -1,0 +1,789 @@
+@charset "utf-8";
+@import 'modules/variables';
+@import 'modules/mixin';
+$cMenuClose: $cBlack;
+$cMenuOpen: $cBlack;
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+//====================
+//スライド
+//====================
+.swiper-slide {
+  height: 500px;
+  overflow: hidden;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    transform: scale(1.3);
+    transition: all 1.9s ease;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,61,125,0.1);
+  }
+  &-active {
+    & > img {
+      transform: none
+    }
+
+    & .hero__title {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+.hero {
+  padding: 100px 0px;
+  &__title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% + 20px));
+    color: $cWhite;
+    font-size: 25px;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease 1s, transform 0.3s ease 1s;
+  }
+  &__footer {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    z-index: 2;
+    height: 68px;
+    width: 22px;
+    overflow: hidden;
+  }
+  &__downarrow {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 6px;
+    @include animation($name: kf-arrow-anime, $iteration-count: infinite, $duration: 2s, $timing-function: linear);
+  }
+  &__scrolltext {
+    position: absolute;
+    transform: rotate(90deg);
+    color: rgba(255,255,255,0.7);
+    left: -8px;
+    top: 11px;
+    font-size: 1.2em;
+  }
+}
+
+@keyframes kf-arrow-anime {
+  0%,
+  50%,
+  100% {
+    transform: translateY(-10%);
+  }
+  30% {
+    transform: none;
+  }
+}
+
+// .swiper-slide img {
+//   width: 100%;
+//     -o-object-fit: contain;
+//     object-fit: contain;
+// }
+// .slick-arrow {
+//    display: none !important;
+// }
+.content {
+  margin-bottom: 80px;
+}
+
+
+.fade { 
+  max-width: 600px;
+  margin: 0 auto 50px;
+  padding: 0;
+  height: auto;
+}
+.fade img{
+  width: 100%;
+}
+
+//====================
+//画像のカバースライド
+//====================
+.cover-slide {
+  position: relative;
+  overflow: hidden;
+  
+
+  & img {
+    vertical-align: bottom; //上下余白解消
+    max-width: 100%;
+    height: auto;
+  }
+  &::after {
+    content: "";
+    position: absolute;//画像の上に背景が流れてくるため
+    z-index: 2;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #eaebe6;
+    opacity: 0;
+  }
+  &.inview {
+    &::after {
+      opacity: 1;
+       @include animation($name: kf-cover-slide, $duration: 1.6s, $timing-function: ease-in-out, $fill-mode: both);
+    }
+  }
+}
+@keyframes kf-cover-slide {
+  0% {
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  50% {
+    transform-origin: left;
+    transform: scaleX(1);
+  }
+  50.1% {
+    transform-origin: right;
+    transform: scaleX(1);
+  }
+  100% {
+    transform-origin: right;
+    transform: scaleX(0);
+  }
+}
+
+.img-zoom {
+  opacity: 0;
+  
+
+  .inview & {
+    opacity: 1;
+    transition: all 0.3s ease;
+    @include animation($name: kf-img-show, $duration: 1.6s, $timing-function: ease-in-out, $fill-mode: normal);
+
+    &:hover {
+      transform: scale(1.3);
+    }
+  }
+}
+@keyframes kf-img-show {
+  0% {//左から大きくなってるため
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  50.1% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+//====================
+//header
+//====================
+
+
+.header {
+  position: fixed;
+  width: 100%;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.9);
+  transition: .3s;
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1070px;
+  }
+  .logo {
+    font-size: 38px;
+  }
+}
+.nav-button {
+  display: none;
+}
+.nav {
+  display: flex;
+  a {
+    color: #535353;;
+    text-decoration: none;
+    
+  }
+  li {
+    margin-left:  20px;
+  }
+}
+.nav-wrap.open {
+  display: block;
+}
+.nav-wrap.close {
+  display: none;
+}
+.is-show {
+  transform: translateY(0);
+}
+
+.header.fixed {
+  background-color: rgba(255, 255, 255, 0.9);
+    -webkit-box-shadow: 10px 0 25px -10px rgba(0, 0, 0, 0.5);
+    box-shadow: 10px 0 25px -10px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    transition: .3s;
+}
+//====================
+//travel
+//====================
+.travel {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1070px;
+  margin-bottom: 80px;
+
+  &__inner {
+    display: flex;
+    padding: 50px 150px;
+    background-color: $cBgGray;
+  }
+  &__title {
+    position: relative;
+
+    @include p-base($width: 100px, $height: 1px, $top: 50%, $left: -120px) {
+      background-color: $cBlack;
+      transform: translateY(-50%) scaleX(0);
+      transition: transform 0.3s ease 1.6s;
+      transform-origin: right;
+      
+    }
+    &.inview {
+      &::before {
+        transform: translateY(-50%);
+      }
+    }
+  }
+  &__sub {
+    margin-bottom: 16px;
+  }
+  &__description {
+    margin-bottom: 40px;
+  }
+  &__img {
+    width: 50%;
+    height: 350px;
+    margin-right: 50px;
+    margin-bottom: 16px;
+
+    & > img {
+      
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  &__texts {
+    padding-bottom: 16px;
+    display: flex;
+    align-items: flex-end;
+  }
+}
+.travel__title.main-title {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+.description__sub {
+  margin-bottom: 16px;
+}
+
+.purple{
+  color: $cWineRed;
+}
+
+//====================
+//houses
+//====================
+.houses {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1070px;
+  margin-bottom: 80px;
+
+  &__inner {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__item {
+    flex-basis: 50%;
+    margin-bottom: 60px;
+  }
+  &__title {
+    font-size: 17px;
+    margin-bottom: 16px;
+  }
+  &__btn {
+     text-align: center;
+     flex-basis: 100%;//画像が奇数のとき横並びにしないで、折り返すように
+  }
+}
+
+.main-title {
+  font-size: 25px;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+.sub-title {
+  font-size: 15px;
+  color: $cSubTitle;
+  margin-bottom: 12px;
+}
+
+.btn {
+  background-color: $cWhite;
+  color: black;
+  border: 1px solid $cBlack;
+  padding: 10px 40px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .3s;
+
+  &.slide-bg {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background-color: $cBlack;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(-100%);
+      transition: all .3s;
+      z-index: -1;
+    }
+    &:hover {
+      color: $cWhite;
+
+      &::before {
+        transform: none;
+      }
+    }
+  }
+}
+//====================
+//popular
+//====================
+.popular {
+  
+  &__inner {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: -50px;
+      left: 0;
+      width: 100%;
+      height: 90%;
+      background-color: $cBgGray;
+    }
+  }
+  &__header {
+    width: 90%;
+    margin: 0 auto;
+    max-width: $contentMaxWidth; 
+  }
+  &__container {
+    position: relative;//inner::beforeのやつが上にきちゃってるから
+    z-index: 2; //inner::beforeのやつが上にきちゃってるから
+    display: flex;
+    width: 90%;
+    margin: 0 auto;
+    max-width: $contentMaxWidth; 
+  }
+  &__item {
+    margin-right: 25px;
+  }
+  &__title {
+    font-size: 17px;
+    margin-bottom: 16px;
+  }
+  &__img {
+    width: 100%;
+    height: 337px;
+    overflow: hidden;
+    margin-bottom: 5px;
+
+    & > img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
+//====================
+//footer
+//====================
+.footer {
+  padding: 90px 0;
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1070px;
+
+  &__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+  }
+  &__ul {
+    display: flex;
+    padding: 0;
+    margin: 0;
+  }
+  &__li {
+    
+    margin: 10px 30px 0 0;
+
+    & > a {
+      color: $cSubTitle;
+      text-decoration: none;
+    }
+  }
+}
+.logo {
+  font-size: 42px;
+  display: flex;
+
+  &__img {
+    width: 0.7em;
+  }
+  &__world {
+    color: $cWineRed;
+  }
+}
+
+
+
+//====================
+//スマホ
+//====================
+@media screen and (max-width: 1024px){
+  
+}
+@media screen and (max-width: 960px){
+  .travel__inner {
+    padding: 50px;
+  }
+}
+@media screen and (max-width:768px){ /*768px以下*/ //max-width:768px
+  //====================
+  //header
+  //====================
+  .nav-button {
+    display: block;
+    cursor: pointer;
+  }
+  .nav-wrap {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: none;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100%;
+    .nav {
+      // height: 100%;
+      // position: relative;
+      // overflow-x: hidden;
+      // overflow-y: auto;
+      // display: block;
+      height: 50%;
+    /* width: 50%; */
+    /* position: relative; */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    transform: translate();
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: block;
+    }
+    li {
+      display: block;
+      margin: 3em;
+      a {
+        color: #fff;
+        font-size: 22px;
+      }
+    }
+  }
+  /*メニューボタン*/
+  .nav-button,
+  .nav-button span {
+    display: inline-block;
+    transition: all 0.4s;
+    box-sizing: border-box;
+  }
+  .nav-button {
+    z-index: 20;
+    position: relative;
+    width: 40px;
+    height: 36px;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+  }
+  .nav-button span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: gray;
+    border-radius: 4px;
+  }
+  .nav-button span:nth-of-type(1) {
+    top: 0;
+  }
+  .nav-button span:nth-of-type(2) {
+    top: 16px;
+  }
+  .nav-button span:nth-of-type(3) {
+    bottom: 0;
+  }
+  .nav-button.active span:nth-of-type(1) {
+    -webkit-transform: translateY(16px) rotate(-45deg);
+    transform: translateY(16px) rotate(-45deg);
+  }
+  .nav-button.active span:nth-of-type(2) {
+    opacity: 0;
+  }
+  .nav-button.active span:nth-of-type(3) {
+    -webkit-transform: translateY(-16px) rotate(45deg);
+    transform: translateY(-16px) rotate(45deg);
+  }
+
+  .houses {
+
+    &__inner {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .popular{
+    &__container {
+      //flex-direction: column;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    &__item {
+      margin: 0;
+      width: 45%;
+    }
+    &__img {
+      height: 200px;
+    }
+  }
+  //====================
+  //travel
+  //====================
+  .travel {
+
+    &__inner {
+      // flex-direction: column;
+      padding: 50px;
+    }
+    &__title {
+      &::before {
+        display: none;
+      }
+    }
+    &__title.main-title {
+      font-size: 25px;
+    }
+    &__img {
+      height: 300px;
+      width: 50%;
+
+      & > img {
+        width: 100%;
+      }
+    }
+  }
+  //====================
+  //footer
+  //====================
+  .footer {
+
+    // &__nav {
+    //   display: block;
+    // }
+    // &__ul {
+    //   display: block;
+    // }
+    // &__li {
+    //   margin: 20px 0;
+    // }
+  }
+  // .logo {
+  //   font-size: 38px;
+  //   justify-content: center;
+    
+  // }
+}
+@media screen and (max-width: 600px){
+  .travel {
+    &__inner {
+      display: block;
+    }
+    &__img {
+      width: 100%;
+    }
+  }
+}
+@media screen and (max-width: 480px) { 
+  // .nav-button {
+  //   display: block;
+  //   cursor: pointer;
+  // }
+  // .nav-wrap {
+  //   position: fixed;
+  //   left: 0;
+  //   top: 0;
+  //   display: none;
+  //   z-index: 10;
+  //   background-color: rgba(0, 0, 0, 0.7);
+  //   width: 100%;
+  //   height: 100%;
+  //   .nav {
+  //     height: 100%;
+  //     position: relative;
+  //     overflow-x: hidden;
+  //     overflow-y: auto;
+  //     display: block;
+  //   }
+  //   li {
+  //     display: block;
+  //     margin: 2em;
+  //     a {
+  //       color: #fff;
+  //       font-size: 18px;
+  //     }
+  //   }
+  // }
+  // /*メニューボタン*/
+  // .nav-button,
+  // .nav-button span {
+  //   display: inline-block;
+  //   transition: all 0.4s;
+  //   box-sizing: border-box;
+  // }
+  // .nav-button {
+  //   z-index: 20;
+  //   position: relative;
+  //   width: 40px;
+  //   height: 36px;
+  //   -webkit-tap-highlight-color:rgba(0,0,0,0);
+  // }
+  // .nav-button span {
+  //   position: absolute;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 4px;
+  //   background-color: gray;
+  //   border-radius: 4px;
+  // }
+  // .nav-button span:nth-of-type(1) {
+  //   top: 0;
+  // }
+  // .nav-button span:nth-of-type(2) {
+  //   top: 16px;
+  // }
+  // .nav-button span:nth-of-type(3) {
+  //   bottom: 0;
+  // }
+  // .nav-button.active span:nth-of-type(1) {
+  //   -webkit-transform: translateY(16px) rotate(-45deg);
+  //   transform: translateY(16px) rotate(-45deg);
+  // }
+  // .nav-button.active span:nth-of-type(2) {
+  //   opacity: 0;
+  // }
+  // .nav-button.active span:nth-of-type(3) {
+  //   -webkit-transform: translateY(-16px) rotate(45deg);
+  //   transform: translateY(-16px) rotate(45deg);
+  // }
+  //=========================
+  //travel
+  //=========================
+  .travel {
+    &__inner {
+      padding: 15px;
+      display: block;
+    }
+    &__img {
+      width: 100%;
+    }
+  }
+  //=========================
+  //popular
+  //=========================
+  .popular {
+    &__container {
+      flex-direction: column;
+    }
+    &__item {
+      width: auto;
+    }
+  }
+  //========================
+  //footer
+  //========================
+  .footer {
+
+     &__nav {
+       display: block;
+     }
+     &__ul {
+       display: block;
+     }
+     &__li {
+       margin: 20px 0;
+     }
+  }
+   .logo {
+     font-size: 38px;
+     justify-content: center;
+    
+   }
+}
